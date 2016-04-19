@@ -62,7 +62,6 @@ module.exports = function(passport) {
           console.log("Username:  " + username);
           console.log("Password:  " + password);
         User.findOne({ username: username }, function (err, user) {
-        console.log("User:  " + user.password);
           if (err){
                 console.log("Error");
                 return callback(err);
@@ -83,7 +82,6 @@ module.exports = function(passport) {
       }
     ));
     
-    
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'username',
@@ -102,12 +100,10 @@ module.exports = function(passport) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
-
             // check to see if theres already a user with that email
             if (user) {
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
-
                 // if there is no user with that email
                 // create the user
                 var newUser            = new User();
@@ -123,12 +119,9 @@ module.exports = function(passport) {
                     return done(null, newUser);
                 });
             }
-
-        });    
-
         });
-
-    }));
+    });
+}));
     
      // =========================================================================
     // LOCAL LOGIN =============================================================
@@ -158,7 +151,6 @@ module.exports = function(passport) {
             // if the user is found but the password is wrong
             if (!user.validPassword(password))
                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-
             // all is well, return successful user
             return done(null, user);
         });

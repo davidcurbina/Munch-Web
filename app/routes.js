@@ -1,5 +1,6 @@
 // app/routes.js
 var notificationController = require('../config/notificationController.js');
+var applicationController = require('../config/applicationController.js');
 
 module.exports = function(app, passport) {
 
@@ -21,6 +22,9 @@ module.exports = function(app, passport) {
     app.post('/register', passport.authenticate('login'), notificationController.register);
 
     app.get('/instances',passport.authenticate('login'), notificationController.find);
+    
+    app.get('/locations', applicationController.locations);
+    app.post('/update_location', applicationController.updateLocation);
     // =====================================
     // LOGOUT ==============================
     // =====================================

@@ -1,5 +1,6 @@
 //var gcm = require('node-gcm-service');
 var Instance = require('../app/models/token.js');
+var mongoose = require('mongoose');
 
 module.exports.register = function(request,response){
     var mongoose = require('mongoose');
@@ -34,8 +35,6 @@ module.exports.register = function(request,response){
 }
 
 module.exports.find = function(request,response){
-    var mongoose = require('mongoose');
-    
     //response.contentType('application/json');
     
     Instance.find({}, function(err,results){
@@ -57,61 +56,60 @@ module.exports.send = function(req,res){
     var message = new gcm.Message();
 
     // ... or some given values
-    var message = new gcm.Message({
+    /*var message = new gcm.Message({
         collapseKey: 'demo',
         priority: 'high',
         contentAvailable: true,
         delayWhileIdle: true,
         timeToLive: 3,
-        restrictedPackageName: "gcm.play.android.samples.com.gcmquickstart",
+        restrictedPackageName: "davidurbina.weplan",
         dryRun: false,
         data: {
-            key1: 'message1',
+            message: 'This is a notification that will be displayed ASAP.',
             key2: 'message2'
         },
         notification: {
             title: "Hello, World",
             icon: "ic_launcher",
-            body: "This is a notification that will be displayed ASAP."
+            message: "This is a notification that will be displayed ASAP."
         }
-    });
-
-    // Change the message data
-    // ... as key-value
-    message.addData('key1','message1');
-    message.addData('key2','message2');
-
-    // ... or as a data object (overwrites previous data object)
-    message.addData({
-        key1: 'message1',
-        key2: 'message2'
-    });
-
-    // Set up the sender with you API key
-    var sender = new gcm.Sender('AIzaSyAjiwspjIhQRX-gC_8BbzH8G34rSTI3xKc');
-
-    // Add the registration tokens of the devices you want to send to
-    var registrationTokens = [];
-    registrationTokens.push('fCEmfSjjsO4:APA91bHDoH5BL4RheRAJ610RfnQi93Vr3FV3kffTdHjTyTBdM-0FwymAc0ovK5H5KRFUIgKD3F8AdR-hMTvgk7BXvgTir-bzzIN761D58-uQxVcT8sXBHvg7gAQJwvXCfoXN3yetuzhO');
-    registrationTokens.push('ejQB8n9iAqE:APA91bFk9vYvqq9-RwAOSXz5q26bAQtHxVbfWeKXpU3fAd4H-Wi3-trXtiI8gxmpc0OfeOm8enspbKtCg-UCX3n5tP8j_EdXHpfVu03P1VO-mxGTxfhUQvKWBh9v4qJRI2weIGDYFxjn');
-
-    // Send the message
-    // ... trying only once
-    /*sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
-      if(err) console.error(err);
-      else    console.log(response);
-    });
-
-    // ... or retrying
-    sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
-      if(err) console.error(err);
-      else    console.log(response);
     });*/
 
-    // ... or retrying a specific number of times (10)
-    sender.send(message, { registrationTokens: registrationTokens }, 1, function (err, response) {
-      if(err) console.error(err);
-      else    console.log(response);
-    });
-    res.send("Success");
+    // ... as key-value
+    message.addData('message','Hey David!');
+    message.addData('title','Hello');
+
+    // Set up the sender with you API key
+    var sender = new gcm.Sender('AIzaSyAHfse2B5gHtihCNwjoTSrTsNvImAhNecU');
+
+    var instances;
+    /*
+    Instance.find({}, function(err,results){
+            if (err){
+                res.send("Error finding tokens.");
+                console.log("err");
+            } 
+        instances = results;
+        console.log(instances.length);
+        var registrationTokens = [];
+        for(var i = 0; i < instances.length; i++){
+            registrationTokens.push(instances[i].instance_id);
+            console.log("Sending to:"+instances[i].instance_id+"/n");
+        }
+
+        
+    })
+     .exec(function(err,results){
+        if (err) throw err;
+        res.send("Unable to access token database");
+    });*/
+    
+    sender.send(message, { topic: '/topics/Test'} , 1, function (err, response) {
+        if(err) {
+            console.error(err);
+            res.send("Error sending gcm messages.");
+        }
+          else    
+              res.send("Success");
+        });
 }
