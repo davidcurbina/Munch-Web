@@ -16,6 +16,7 @@ module.exports.locations = function(request, response) {
 
 module.exports.updateLocation = function(request, response){
     var username = request.body.username;
+    var new_name = request.body.name;
     var new_description = request.body.description;
     var new_city = request.body.city;
     var new_street = request.body.street;
@@ -31,7 +32,8 @@ module.exports.updateLocation = function(request, response){
         street:new_street,
         latitude:new_lat,
         longitude:new_long,
-        phonenumber:new_number
+        phonenumber:new_number,
+        name:new_name
     }, function(err, numberAffected, rawResponse){
         if(err)
             response.send("Unable to update records");
