@@ -38,6 +38,18 @@ module.exports = mongoose.model('Location',{
     street:String,
     latitude:Number,
     longitude:Number,
-    phonenumber:String
-});
+    phonenumber:String,
+    categories:[
+                {
+                    category:String,
+                    items:[
+                            {
+                                name: String,
+                                price: Number
+                            }
+                        ]
+                }
+            ]
+    }
+);
 

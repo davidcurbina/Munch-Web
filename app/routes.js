@@ -20,10 +20,15 @@ module.exports = function(app, passport) {
     app.post('/send', passport.authenticate('login'), notificationController.send);
 
     app.post('/register', passport.authenticate('login'), notificationController.register);
+    
+    app.post('/addCategory', applicationController.addCategory);
+    app.post('/addItem', applicationController.addItem);
 
     app.get('/instances',passport.authenticate('login'), notificationController.find);
     
     app.get('/locations', applicationController.locations);
+    app.post('/categories', applicationController.categories);
+    
     app.post('/update_location', applicationController.updateLocation);
     // =====================================
     // LOGOUT ==============================
