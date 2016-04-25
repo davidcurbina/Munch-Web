@@ -29,6 +29,22 @@ module.exports.categories = function(request, response) {
     })
 }
 
+module.exports.items = function(request, response) {
+    
+    var username = request.body.username;
+    var category = request.body.category;
+    
+    Location.findOne({user:username, 'categories.category': category}, 'categories.$.items',function(err, result){
+        if(err)
+            console.log("Error finding categories");
+        response.send(result);
+    })
+    .exec(function(err,result){
+        if (err)
+            response.send(err.toString())
+    })
+}
+
 module.exports.updateLocation = function(request, response){
     var username = request.body.username;
     var new_name = request.body.name;

@@ -28,6 +28,7 @@ module.exports = function(app, passport) {
     
     app.get('/locations', applicationController.locations);
     app.post('/categories', applicationController.categories);
+     app.post('/items', applicationController.items);
     
     app.post('/update_location', applicationController.updateLocation);
     // =====================================
