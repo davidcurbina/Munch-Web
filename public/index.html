@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app=contactsApp>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Material Design for Bootstrap</title>
+
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- Angular lib -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Material Design Bootstrap -->
+    <script src="/js/app.js"></script>
+    <link href="css/mdb.css" rel="stylesheet">
+    <style>
+        .container .row{
+          padding: 15px;
+        }
+        body{
+          font-family: Roboto;
+        }
+        .question{
+          font-family: Roboto;
+          font-size: 2rem;
+          font-weight: 400;
+          text-align: center;
+          color: white;
+        }
+        .inputSearch input.elementAlign{
+          float:left;
+          display:inline;
+          width: 85%;
+        }
+        .inputSearch button.elementAlign{
+          float:left;
+          display:inline;
+          width: 10%;
+          border: 0;
+          background-color: white;
+        }
+        .searchDiv{
+          margin-top: 200px;
+          padding: 10px;
+        }
+        .divBackground {
+          background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('./img/food_mod.png');
+          background-size: cover;
+          background-repeat:no-repeat;
+          }
+        .containerMain{
+            height: 55vh;
+          }
+        .inputSearch{
+          background-color: white;
+          border-radius:5px;
+          vertical-align: middle;
+          }
+        .vcenter {
+            display: inline-block;
+            vertical-align: middle;
+            float: none;
+          }
+      @media only screen and (max-width: 600px) {
+        .containerMain{
+            height: 30vh;
+          }
+        .divBackground {
+          background:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ),url('./img/food3.png');
+          background-size: auto 300px;
+          background-repeat:no-repeat;
+          }
+        .searchDiv{
+            margin-top: 10%;
+          }
+        .inputSearch button.elementAlign{
+            float:left;
+            display:inline;
+            width: 15%;
+            border: 0;
+            background-color: white;
+        }
+      }
+      @media only screen and (min-width: 600px) {
+        divBackground {
+          background:url('./img/food2.png');
+          background-size: auto 80%;
+          background-repeat:no-repeat;
+          }
+      }
+      @media only screen and (min-width: 768px) {
+        divBackground {
+          background:url('./img/food2.png');
+          background-size: 100% auto;
+          background-repeat:no-repeat;
+          }
+      }
+    </style>
+</head>
+
+<body>
+
+  <!--Navigation-->
+    <nav class="navbar blue navbar-fixed-top z-depth-1" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div>
+                  <a class="navbar-brand waves-effect waves-light" href="#/"><img src="./img/munch_logo.png" style="max-width:150px;width=100%"></a>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/signin" class="waves-effect waves-light">Sign In</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/.Navigation-->
+      <div ng-view>
+    </div>
+      <footer class="page-footer blue">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="white-text">David Urbina</h5>
+              <p class="grey-text text-lighten-4">Contact me for more information on how i can help make your business an application just like this one!.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <!-- SCRIPTS -->
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!-- Material Design Bootstrap -->
+    <script type="text/javascript" src="js/mdb.js"></script>
+
+
+</body>
+
+</html>
