@@ -2,7 +2,7 @@ angular.module("contactsApp", ['ngRoute'])
     .config(function($routeProvider) {
         $routeProvider
             .when("/", {
-                controller: "NewController",
+                controller: "NewContactController",
                 templateUrl: "home.html"
             })
             .when("/signin", {
@@ -72,11 +72,14 @@ angular.module("contactsApp", ['ngRoute'])
     .controller("ListController", function(contacts, $scope) {
         $scope.contacts = contacts.data;
     })
-    .controller("NewController", function($scope,$location) {
-      console.log("Here");
-        $scope.changeView = function(view){
-          console.log("Recieved");
-            $location.path(view); // path not hash
+    .controller("NewController", function($scope, $location, Contacts) {
+        $scope.back = function() {
+          //console.log("here");
+            $location.path("#/");
+        }
+
+        $scope.signIn = function() {
+          $location.path("#/");
         }
     })
     .controller("NewContactController", function($scope, $location, Contacts) {
