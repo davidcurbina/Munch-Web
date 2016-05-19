@@ -16,7 +16,19 @@ var userSchema = mongoose.Schema({
                             {
                                 name: String,
                                 price: Number,
-                                description: String
+                                description: String,
+                                options:[
+                                          {
+                                            name:String,
+                                            multiple:Boolean,
+                                            elements: [
+                                                        {
+                                                          text: String,
+                                                          price: Number
+                                                        }
+                                            ]
+                                          }
+                                ]
                             }
                         ]
                 }

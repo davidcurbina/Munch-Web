@@ -148,19 +148,47 @@ angular.module("contactsApp", ['ngRoute'])
         $scope.location.categories.splice(index,1);;
       }
       $scope.addItem = function(index){
-        $scope.location.categories[index].items.push({name:"",price:"",description:""});
+        $scope.location.categories[index].items.push({name:"",price:"",description:"",options:[]});
       }
       $scope.removeItem = function(parent, index){
         console.log($scope.location.categories[parent]);
         $scope.location.categories[parent].items.splice(index,1);;
       }
       $scope.viewItem = function($index) {
-        if($scope.loading[$index] != true){
-          $scope.loading[$index] = true;
+        console.log($scope.items);
+        if($scope.items[$index] != true){
+          $scope.items[$index] = true;
         } else {
-          $scope.loading[$index] = false;
+          $scope.items[$index] = false;
         }
       };
+      $scope.viewOption = function($index) {
+        console.log($scope.itemOptions);
+        if($scope.itemOptions[$index] != true){
+          $scope.itemOptions[$index] = true;
+        } else {
+          $scope.itemOptions[$index] = false;
+        }
+      };
+      $scope.addOption = function(parentIndex,index){
+        $scope.location.categories[parentIndex].items[index].options.push({name:"",multiple:"",elements:[]});
+      }
+      $scope.removeOption = function(parentParentIndex, parentIndex,index){
+        $scope.location.categories[parentParentIndex].items[parentIndex].options.splice(index,1);
+      }
+      $scope.addElement = function(parentParentIndex, parentIndex,index){
+        $scope.location.categories[parentParentIndex].items[parentIndex].options[index].elements.push({text:"",price:0});
+      }
+      $scope.removeElement = function(parentParentParentIndex,parentParentIndex, parentIndex,index){
+        $scope.location.categories[parentParentParentIndex].items[parentParentIndex].options[parentIndex].elements.splice(index,1);
+      }
+      $scope.showURL = function(){
+        if(!$scope.editURL){
+          $scope.editURL = true;
+        } else {
+          $scope.editURL = false;
+        }
+      }
     })
     .controller("SignUp", function($scope, $location, $http) {
         $scope.sign_up = function() {
