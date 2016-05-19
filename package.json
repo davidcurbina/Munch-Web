@@ -1,23 +1,23 @@
 {
- "name": "node-authentication",
- "main": "server.js",
- "dependencies" : {
-	"express" : "~4.2.0",
-	"mongoose" : "~4.4.6",
-	"passport" : "latest",
-	"passport-local" : "latest",
-	"passport-facebook" : "latest",
-	"passport-twitter" : "latest",
-	"passport-google-oauth" : "latest",
-    "passport-http" : "latest",
-	"connect-flash" : "~0.1.1",
-	"bcrypt-nodejs" : "latest",
-     "node-gcm" : "latest",
-
-	"morgan" : "~1.0.0",
-	"body-parser" : "~1.0.0",
-	"cookie-parser" : "~1.0.0",
-	"method-override" : "~1.0.0",
-	"express-session" : "~1.0.0"
-	}
+  "name": "node-authentication",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "~1.0.0",
+    "connect-flash": "~0.1.1",
+    "cookie-parser": "~1.0.0",
+    "express": "~4.2.0",
+    "express-session": "~1.0.0",
+    "jsonwebtoken": "^6.2.0",
+    "method-override": "~1.0.0",
+    "mongoose": "~4.4.6",
+    "morgan": "~1.0.0",
+    "node-gcm": "latest",
+    "passport": "latest",
+    "passport-facebook": "latest",
+    "passport-google-oauth": "latest",
+    "passport-http": "latest",
+    "passport-local": "latest",
+    "passport-twitter": "latest"
+  }
 }

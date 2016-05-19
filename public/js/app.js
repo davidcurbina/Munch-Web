@@ -6,120 +6,183 @@ angular.module("contactsApp", ['ngRoute'])
                 templateUrl: "home.html"
             })
             .when("/signin", {
-              controller:"NewController",
-              templateUrl:"sign_in.html"
+              controller:"SignIn",
+              templateUrl:"sign_in.html",
+              authenticated: false
             })
-            .when("/new/contact", {
-                controller: "NewContactController",
-                templateUrl: "contact-form.html"
+            .when("/signup", {
+              controller:"SignUp",
+              templateUrl:"sign_up.html",
+              authenticated: false
             })
-            .when("/contact/:contactId", {
-                controller: "EditContactController",
-                templateUrl: "contact.html"
+            .when("/locationAdmin", {
+              controller:"Admin",
+              templateUrl:"location_admin.html",
+              authenticated: true
             })
             .otherwise({
                 redirectTo: "/"
             })
     })
-    .service("Contacts", function($http) {
-        this.getContacts = function() {
-            return $http.get("/contacts").
-                then(function(response) {
-                    return response;
-                }, function(response) {
-                    alert("Error finding contacts.");
-                });
+    .run(function($rootScope, $location, auth) {
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+        if(!auth.checkPermissionForView(next)){
+          $location.path("/");
         }
-        this.createContact = function(contact) {
-            return $http.post("/contacts", contact).
-                then(function(response) {
-                    return response;
-                }, function(response) {
-                    alert("Error creating contact.");
-                });
-        }
-        this.getContact = function(contactId) {
-            var url = "/contacts/" + contactId;
-            return $http.get(url).
-                then(function(response) {
-                    return response;
-                }, function(response) {
-                    alert("Error finding this contact.");
-                });
-        }
-        this.editContact = function(contact) {
-            var url = "/contacts/" + contact._id;
-            console.log(contact._id);
-            return $http.put(url, contact).
-                then(function(response) {
-                    return response;
-                }, function(response) {
-                    alert("Error editing this contact.");
-                    console.log(response);
-                });
-        }
-        this.deleteContact = function(contactId) {
-            var url = "/contacts/" + contactId;
-            return $http.delete(url).
-                then(function(response) {
-                    return response;
-                }, function(response) {
-                    alert("Error deleting this contact.");
-                    console.log(response);
-                });
-        }
+      })
     })
-    .controller("ListController", function(contacts, $scope) {
-        $scope.contacts = contacts.data;
-    })
-    .controller("NewController", function($scope, $location, Contacts) {
-        $scope.back = function() {
-          //console.log("here");
-            $location.path("#/");
-        }
+    .factory('auth', ['$http', '$window', function($http, $window){
+      var auth = {};
+      var admin = false;
+      var username = "";
+      var location;
 
+      auth.saveToken = function (token){
+        $window.localStorage['munch-token'] = token;
+      };
+
+      auth.getToken = function (){
+        return $window.localStorage['munch-token'];
+      }
+
+      auth.isLoggedIn = function(){
+        var token = auth.getToken();
+
+        if(token){
+          var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+          return payload.exp > Date.now() / 1000;
+        } else {
+          return false;
+        }
+      };
+
+      auth.currentUser = function(){
+        if(auth.isLoggedIn()){
+          var token = auth.getToken();
+          var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+          return payload.username;
+        }
+      };
+
+      auth.register = function(user){
+        return $http.post('/register', user).success(function(data){
+          auth.saveToken(data.token);
+        });
+      };
+
+      auth.locationDetails = function(user){
+        return $http.post('/location', {username:user}).success(function(data){
+          auth.location = data;
+          console.log(data);
+        }).error(function(err){
+          console.log(err);
+        });
+      };
+
+      auth.updateLocation = function(location){
+        return $http.post('/update_location', location).success(function(data){
+          console.log(data);
+        }).error(function(err){
+          console.log(err);
+        });
+      };
+
+      auth.logIn = function(user){
+        return $http.post('/login', user).success(function(data){
+          auth.saveToken(data.token);
+          auth.admin = data.admin;
+        }).error(function(err){
+          console.log(err);
+        });
+      };
+
+      auth.logOut = function(){
+        $window.localStorage.removeItem('flapper-news-token');
+      };
+
+      auth.checkPermissionForView = function(view) {
+          if (!view.authenticated) {
+              return true;
+          }
+          return auth.isLoggedIn();
+      };
+
+      return auth;
+    }])
+    .controller("SignIn", function($scope, $location, auth) {
+        $scope.sign_in = function() {
+            //$location.path("#/");
+            var username = $scope.user;
+            if(username == undefined || username == ""){
+              alert("You must enter a username");
+            } else {
+              auth.logIn($scope.user).error(function(error){
+                $scope.error = error;
+                console.log(error);
+              }).then(function(){
+                $location.path("/locationAdmin");
+              });
+            }
+        }
+    })
+    .controller("Admin", function($scope, $location, auth) {
+      console.log(auth.currentUser());
+      auth.locationDetails(auth.currentUser()).error(function(error){
+        $scope.error = error;
+        console.log(error);
+      }).then(function(){
+        $scope.title = "Menu";
+        $scope.location = auth.location;
+      });
+      $scope.update = function(){
+        console.log($scope.location);
+        auth.updateLocation($scope.location);
+      }
+      $scope.addCategory = function(){
+        $scope.location.categories.push({category:"",items:[]});
+      }
+      $scope.removeCategory = function(index){
+        console.log($scope.location.categories[index]);
+        $scope.location.categories.splice(index,1);;
+      }
+      $scope.addItem = function(index){
+        $scope.location.categories[index].items.push({name:"",price:"",description:""});
+      }
+      $scope.removeItem = function(parent, index){
+        console.log($scope.location.categories[parent]);
+        $scope.location.categories[parent].items.splice(index,1);;
+      }
+      $scope.viewItem = function($index) {
+        if($scope.loading[$index] != true){
+          $scope.loading[$index] = true;
+        } else {
+          $scope.loading[$index] = false;
+        }
+      };
+    })
+    .controller("SignUp", function($scope, $location, $http) {
+        $scope.sign_up = function() {
+            var username = $scope.username;
+            var password = $scope.password;
+            var email = $scope.email;
+            var admin = true;
+
+            if(username == undefined || username == ""){
+              alert("You must enter a username");
+            } else {
+              $http({
+                method: 'POST',
+                url: '/register',
+                headers: {'Content-Type': 'application/json'},
+                data: {username: $scope.username, password: $scope.password, email: $scope.email, admin:true}
+            }).success(function (data) {
+              alert(data);
+            });
+            }
+        }
         $scope.signIn = function() {
           $location.path("#/");
-        }
-    })
-    .controller("NewContactController", function($scope, $location, Contacts) {
-        $scope.back = function() {
-            $location.path("#/");
-        }
-
-        $scope.saveContact = function(contact) {
-            Contacts.createContact(contact).then(function(doc) {
-                var contactUrl = "/contact/" + doc.data._id;
-                $location.path(contactUrl);
-            }, function(response) {
-                alert(response);
-            });
-        }
-    })
-    .controller("EditContactController", function($scope, $routeParams, Contacts) {
-        Contacts.getContact($routeParams.contactId).then(function(doc) {
-            $scope.contact = doc.data;
-        }, function(response) {
-            alert(response);
-        });
-
-        $scope.toggleEdit = function() {
-            $scope.editMode = true;
-            $scope.contactFormUrl = "contact-form.html";
-        }
-
-        $scope.back = function() {
-            $scope.editMode = false;
-            $scope.contactFormUrl = "";
-        }
-
-        $scope.saveContact = function(contact) {
-            Contacts.editContact(contact);
-            $scope.editMode = false;
-            $scope.contactFormUrl = "";
-        }
-
-        $scope.deleteContact = function(contactId) {
-            Contacts.deleteContact(contactId);
         }
     });

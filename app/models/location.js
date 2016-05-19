@@ -1,38 +1,8 @@
 var mongoose = require('mongoose');
-module.exports = mongoose.model('Location',{
+var userSchema = mongoose.Schema({
     user:String,
-	name: String,
-	description: String,
-    opening_hours: {
-        monday: {
-            Open:Number,
-            Close: Number
-        },
-        tuesday: {
-            Open:Number,
-            Close: Number
-        },
-        wednesday: {
-            Open:Number,
-            Close: Number
-        },
-        thursday: {
-            Open:Number,
-            Close: Number
-        },
-        friday: {
-            Open:Number,
-            Close: Number
-        },
-        saturday: {
-            Open:Number,
-            Close: Number
-        },
-        sunday: {
-            Open:Number,
-            Close: Number
-        }
-    },
+	  name: String,
+	  description: String,
     image:String,
     city:String,
     street:String,
@@ -45,7 +15,8 @@ module.exports = mongoose.model('Location',{
                     items:[
                             {
                                 name: String,
-                                price: Number
+                                price: Number,
+                                description: String
                             }
                         ]
                 }
@@ -53,3 +24,4 @@ module.exports = mongoose.model('Location',{
     }
 );
 
+module.exports = mongoose.model('Location', userSchema);

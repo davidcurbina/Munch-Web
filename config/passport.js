@@ -56,32 +56,22 @@ module.exports = function(passport) {
         });
       }
     ));*/
-    
-    passport.use('login', new BasicStrategy(
-      function(username, password, callback) {
-          console.log("Username:  " + username);
-          console.log("Password:  " + password);
-        User.findOne({ username: username }, function (err, user) {
-          if (err){
-                console.log("Error");
-                return callback(err);
+
+    passport.use('login', new LocalStrategy(
+          function(username, password, done) {
+            User.findOne({ username: username }, function (err, user) {
+              if (err) { return done(err); }
+              if (!user) {
+                return done(null, false, { message: 'Incorrect username.' });
+              }
+              if (!user.validPassword(password)) {
+                return done(null, false, { message: 'Incorrect password.' });
+              }
+              return done(null, user);
+            });
           }
-            // if no user is found, return the message
-            if (!user) {
-                console.log("user not found");
-                return callback(null, false,"Boom"); // req.flash is the way to set flashdata using connect-flash
-            }
-            if (!user.validPassword(password)){
-                console.log("Ended as :" + user.validPassword(password));
-                return callback(null, false,  'Oops! Wrong password.'); // create the loginMessage and save it to session as flashdata
-            }
-            // all is well, return successful user
-            console.log("Good to go");
-            return callback(null, user);
-        });
-      }
-    ));
-    
+        ));
+
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'username',
@@ -122,7 +112,7 @@ module.exports = function(passport) {
         });
     });
 }));
-    
+
      // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
@@ -156,4 +146,4 @@ module.exports = function(passport) {
         });
 
     }));
-}; 
+};

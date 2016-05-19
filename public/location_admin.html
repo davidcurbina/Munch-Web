@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="location_admin.css">
+</br>
+</br>
+</br>
+</br>
+<div class="container">
+	<div class="row">
+
+		<section class="content">
+			<div class="container" width="100%">
+				<div class="row" style="float:left;width:50%;padding-right:5%">
+					<img src={{location.image}} width="300px" style="float:right"/>
+				</div>
+				<div class="row" style="float:left;width:50%;padding-left:5%">
+					Name: <input type="text" ng-model="location.name" style="width:45%">
+				  </br>Description: <input type="text" ng-model="location.description" style="width:45%">
+					</br>Phone Number: <input type="text" ng-model="location.phonenumber" style="width:45%">
+					</br>Town/City: <input type="text" ng-model="location.city" style="width:45%">
+					</br>Street: <input type="text" ng-model="location.street" style="width:45%">
+				</div>
+			</div>
+			<div class="col-md-8 col-md-offset-2">
+				<h4>{{title}}</h4>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="pull-right">
+							<div class="btn-group">
+							</div>
+						</div>
+
+						<div class="table-container" ng-init="loading=[]">
+							<table class="table table-filter">
+								<tbody>
+									<tr>
+										<td>
+												<div style="float:left">
+													<u><h4>Categories</h4></u>
+												</div>
+												<div style="float:right">
+													Edit Mode:
+													<label class="switch">
+												  <input type="checkbox" ng-model="catEdit">
+												  <div class="slider round"></div>
+													</label>
+												</div>
+										</td>
+									</tr>
+									<tr data-status="pendiente" ng-repeat="category in location.categories">
+										<td>
+											<div class="media-body">
+											  <input type="text" placeholder="Add Category Name" ng-model="category.category">
+												<button class="btn btn-danger" style="padding:10px;line-height:10px;float:right" ng-show="catEdit" ng-click="removeCategory($index)">delete</button>
+												<a href ng-click="viewItem($index)">Items:{{category.items.length}}</a>
+												<table class="table table-filter" ng-show="loading[$index]">
+													<tbody>
+														<tr class="row" data-status="pendiente">
+															<td style="padding-left:10%">
+																	<div style="float:left">
+																		<u><h4>Items</h4></u>
+																	</div>
+																	<div style="float:right">
+																		Edit Mode:
+																		<label class="switch">
+																	  <input type="checkbox" ng-model="itemEdit">
+																	  <div class="slider round"></div>
+																		</label>
+																	</div>
+															</td>
+														</tr>
+														<tr class="row" data-status="pendiente" ng-repeat="item in category.items">
+															<td style="padding-left:10%">
+																<button class="btn btn-danger" style="padding:10px;line-height:10px;float:right" ng-show="itemEdit" ng-click="removeItem($parent.$index,$index)">delete</button>
+																<div class="media-body">
+																  <input type="text" ng-model="item.name" placeholder="Add Name" style="float:left;width:50%">
+																	<span style="font-size: 1.5rem">$</span><input type="number" placeholder="Add Price" name="price" step=".05" ng-model="item.price" style="width:45%">
+																</div>
+																<textarea class="textareawrap" name="description" placeholder="Add Description" ng-model="item.description" style="float:left;font-size:14px;height:1.5rem;border:0"/>
+															</td>
+														</tr>
+														<tr class="row" data-status="pendiente" >
+															<td>
+																<button class="btn btn-primary" ng-click="addItem($index)">Add Item</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+									</tr>
+									<tr ng-show="catEdit"><td><button class="btn btn-primary" ng-click="addCategory()">Add Category</button></td></tr>
+								</tbody>
+							</table>
+							<button class="btn-primary" ng-click="update()">Save Changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+</div>

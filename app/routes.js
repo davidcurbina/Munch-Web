@@ -1,6 +1,8 @@
 // app/routes.js
 var notificationController = require('../config/notificationController.js');
 var applicationController = require('../config/applicationController.js');
+var jwt = require('express-jwt');
+var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
 module.exports = function(app, passport) {
 
@@ -13,32 +15,55 @@ module.exports = function(app, passport) {
 
     // process the login form
     /*app.post('/login', passport.authenticate('local-login', function(req,res){
-    
+
     }));*/
 
     // process the signup form
     app.post('/send', passport.authenticate('login'), notificationController.send);
 
-    app.post('/register', passport.authenticate('login'), notificationController.register);
-    
-    app.post('/addCategory', applicationController.addCategory);
-    app.post('/addItem', applicationController.addItem);
+    //app.post('/register', passport.authenticate('login'), notificationController.register);
 
+    app.post('/addCategory', auth, applicationController.addCategory);
+    app.post('/updateCategory', auth, applicationController.updateCategory);
+    app.post('/addItem', auth, applicationController.addItem);
+    app.post('/updateItem', auth, applicationController.updateItem);
     app.get('/instances',passport.authenticate('login'), notificationController.find);
-    
+
     app.get('/locations', applicationController.locations);
+
+    app.post('/location', applicationController.locationDetails);
+
     app.post('/categories', applicationController.categories);
-     app.post('/items', applicationController.items);
-    
+    app.post('/items',auth, applicationController.items);
+
     app.post('/update_location', applicationController.updateLocation);
+
+    app.post('/login', function(req, res, next){
+      passport.authenticate('login', function(err, user, info){
+        if(err){ return next(err); }
+
+        if(user){
+          return res.json({token: user.generateJWT(),isAdmin:user.isAdmin()});
+        } else {
+          return res.status(401).json(info);
+        }
+      })(req, res, next);
+    });
     // =====================================
     // LOGOUT ==============================
     // =====================================
     app.post('/register', function(req, res) {
-        var Instance = require('./models/token.js');
-        
-        var instanceID = req.body.instanceID;
-        Instance.find({instance_id: instanceID}, function(err,results){
+        console.log(req.body);
+
+        var User = require('./models/user.js');
+
+        var sUsername = req.body.username;
+        var sEmail = req.body.email;
+        var sPassword = req.body.password;
+        var sAdmin = req.body.admin;
+        var exists = false;
+
+        User.find({username: sUsername}, function(err,results){
             if (err){
                 console.log("err");
             }
@@ -46,11 +71,10 @@ module.exports = function(app, passport) {
                 console.log("Results:"+results);
                 console.log("User already exits");
                 exists = true;
-                res.send("ID:"+instanceID);
+                res.send("User already exists");
             }else {
-                var token = new Instance({instance_id: instanceID});
-                token.save();
-                res.send("ID:"+instanceID);
+                var new_user = new User({username: sUsername, password:sPassword, admin:sAdmin,email:sEmail});
+                new_user.save();
             }
         })
          .exec(function(err,results){
@@ -67,10 +91,10 @@ module.exports = function(app, passport) {
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 
-    // if user is authenticated in the session, carry on 
+    // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
 
     // if they aren't redirect them to the home page
     res.redirect('/');
-} 
+}
