@@ -56,6 +56,7 @@ module.exports = function(app, passport) {
         console.log(req.body);
 
         var User = require('./models/user.js');
+        var Location = require('./models/location.js');
 
         var sUsername = req.body.username;
         var sEmail = req.body.email;
@@ -75,6 +76,10 @@ module.exports = function(app, passport) {
             }else {
                 var new_user = new User({username: sUsername, password:sPassword, admin:sAdmin,email:sEmail});
                 new_user.save();
+                if(sAdmin){
+                  var new_AdminUser = new Location({username: sUsername});
+                  new_AdminUser.save();
+                }
             }
         })
          .exec(function(err,results){

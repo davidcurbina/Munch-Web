@@ -6,8 +6,8 @@ var userSchema = mongoose.Schema({
     image:String,
     city:String,
     street:String,
-    latitude:Number,
-    longitude:Number,
+    latitude: {type:Number, default:18.082858},
+    longitude:{type:Number, default:-88.569125},
     phonenumber:String,
     categories:[
                 {

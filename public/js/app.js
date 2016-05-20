@@ -129,6 +129,7 @@ angular.module("contactsApp", ['ngRoute'])
     })
     .controller("Admin", function($scope, $location, auth) {
       console.log(auth.currentUser());
+
       auth.locationDetails(auth.currentUser()).error(function(error){
         $scope.error = error;
         console.log(error);
@@ -137,7 +138,8 @@ angular.module("contactsApp", ['ngRoute'])
         $scope.location = auth.location;
       });
       $scope.update = function(){
-        console.log($scope.location);
+        $scope.location.latitude = angular.element('#lat').val();
+        $scope.location.longitude = angular.element('#long').val();
         auth.updateLocation($scope.location);
       }
       $scope.addCategory = function(){
@@ -187,6 +189,15 @@ angular.module("contactsApp", ['ngRoute'])
           $scope.editURL = true;
         } else {
           $scope.editURL = false;
+        }
+      }
+      $scope.displayMap = function(){
+        if(!$scope.showMap){
+          $scope.showMap = true;
+          $scope.mapStatus = "Show";
+        } else {
+          $scope.showMap = false;
+          $scope.mapStatus = "Hide";
         }
       }
     })

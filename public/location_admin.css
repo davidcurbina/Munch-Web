@@ -61,3 +61,7 @@ width:100%;
 min-height:50px;
 height:auto;
 border:2px solid rgba(63,63,63,1);}
+#map {
+        width: 500px;
+        height: 400px;
+      }
