@@ -34,7 +34,7 @@ module.exports = function(app, passport) {
     app.post('/location', applicationController.locationDetails);
 
     app.post('/categories', applicationController.categories);
-    app.post('/items',auth, applicationController.items);
+    app.post('/items', applicationController.items);
 
     app.post('/update_location', applicationController.updateLocation);
 
