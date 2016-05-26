@@ -8,7 +8,11 @@ module.exports.locations = function(request, response) {
             console.log("Error fidn locations");
         response.send(result);
     })
-    .select({ 'name': 1, _id: 0 })
+    .select({ 'name': 1,
+              'description':1,
+              'image':1,
+              'latitude':1,
+              'longitude':1,_id: 0 })
     .exec(function(err,result){
         if (err)
             response.send(err.toString())
