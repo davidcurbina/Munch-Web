@@ -12,7 +12,8 @@ module.exports.locations = function(request, response) {
               'description':1,
               'image':1,
               'latitude':1,
-              'longitude':1,_id: 0 })
+              'longitude':1,
+              'user':1,_id: 0 })
     .exec(function(err,result){
         if (err)
             response.send(err.toString())
