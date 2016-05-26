@@ -8,6 +8,7 @@ module.exports.locations = function(request, response) {
             console.log("Error fidn locations");
         response.send(result);
     })
+    .select({ 'name': 1, _id: 0 })
     .exec(function(err,result){
         if (err)
             response.send(err.toString())
@@ -38,7 +39,6 @@ module.exports.categories = function(request, response) {
             console.log("Error finding categories");
         response.send(result);
     })
-    .select({ 'categories.category': 1, _id: 0 })
     .exec(function(err,result){
         if (err)
             response.send(err.toString())
