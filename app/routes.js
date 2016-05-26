@@ -77,7 +77,7 @@ module.exports = function(app, passport) {
                 var new_user = new User({username: sUsername, password:sPassword, admin:sAdmin,email:sEmail});
                 new_user.save();
                 if(sAdmin){
-                  var new_AdminUser = new Location({username: sUsername});
+                  var new_AdminUser = new Location({user: sUsername});
                   new_AdminUser.save();
                 }
             }
