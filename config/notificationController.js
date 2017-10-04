@@ -4,13 +4,13 @@ var mongoose = require('mongoose');
 
 module.exports.register = function(request,response){
     var mongoose = require('mongoose');
-    
+
     var exists = false;
     response.contentType('application/json');
-    
+
     var instanceID = request.body.instanceID;
     console.log("InstanceID:" +  request.body.instanceID);
-    
+
     Instance.find({instance_id: instanceID}, function(err,results){
             if (err){
                 console.log("err");
@@ -36,11 +36,11 @@ module.exports.register = function(request,response){
 
 module.exports.find = function(request,response){
     //response.contentType('application/json');
-    
+
     Instance.find({}, function(err,results){
             if (err){
                 console.log("err");
-            } 
+            }
         response.send(results);
     })
      .exec(function(err,results){
@@ -88,7 +88,7 @@ module.exports.send = function(req,res){
             if (err){
                 res.send("Error finding tokens.");
                 console.log("err");
-            } 
+            }
         instances = results;
         console.log(instances.length);
         var registrationTokens = [];
@@ -97,19 +97,20 @@ module.exports.send = function(req,res){
             console.log("Sending to:"+instances[i].instance_id+"/n");
         }
 
-        
+
     })
      .exec(function(err,results){
         if (err) throw err;
         res.send("Unable to access token database");
     });*/
-    
-    sender.send(message, { topic: '/topics/Test'} , 1, function (err, response) {
+
+    sender.send(message, { topic: '/topics/global'} , 1, function (err, response) {
         if(err) {
             console.error(err);
             res.send("Error sending gcm messages.");
         }
-          else    
+          else
+              console.log(response);
               res.send("Success");
         });
 }

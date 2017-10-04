@@ -2,7 +2,7 @@ angular.module("contactsApp", ['ngRoute'])
     .config(function($routeProvider) {
         $routeProvider
             .when("/", {
-                controller: "NewContactController",
+                controller: "Home",
                 templateUrl: "home.html"
             })
             .when("/signin", {
@@ -20,6 +20,10 @@ angular.module("contactsApp", ['ngRoute'])
               templateUrl:"location_admin.html",
               authenticated: true
             })
+            .when("/locations", {
+              controller:"Locations",
+              templateUrl:"locations.html",
+            })
             .otherwise({
                 redirectTo: "/"
             })
@@ -31,11 +35,12 @@ angular.module("contactsApp", ['ngRoute'])
         }
       })
     })
-    .factory('auth', ['$http', '$window', function($http, $window){
+    .factory('auth', ['$http', '$window','$location', function($http, $window, $location){
       var auth = {};
       var admin = false;
       var username = "";
       var location;
+      var locationsData;
 
       auth.saveToken = function (token){
         $window.localStorage['munch-token'] = token;
@@ -75,14 +80,22 @@ angular.module("contactsApp", ['ngRoute'])
       auth.locationDetails = function(user){
         return $http.post('/location', {username:user}).success(function(data){
           auth.location = data;
-          console.log(data);
+        }).error(function(err){
+          console.log(err);
+        });
+      };
+
+      auth.locations = function(user){
+        return $http.get('/locations').success(function(data){
+          auth.locationsData = data;
         }).error(function(err){
           console.log(err);
         });
       };
 
       auth.updateLocation = function(location){
-        return $http.post('/update_location', location).success(function(data){
+        return $http.post('/update_location', location,{headers: {Authorization: 'Bearer '+auth.getToken()}})
+      .success(function(data){
           console.log(data);
         }).error(function(err){
           console.log(err);
@@ -99,7 +112,8 @@ angular.module("contactsApp", ['ngRoute'])
       };
 
       auth.logOut = function(){
-        $window.localStorage.removeItem('flapper-news-token');
+        $window.localStorage.removeItem('munch-token');
+        $location.path("/");
       };
 
       auth.checkPermissionForView = function(view) {
@@ -111,6 +125,30 @@ angular.module("contactsApp", ['ngRoute'])
 
       return auth;
     }])
+    .controller("Home", function($scope, $location, auth) {
+      console.log("Here");
+        $scope.findFood = function() {
+            console.log("findFood");
+            $location.path("/locations");
+        }
+    })
+    .controller("Locations", function($scope, $location, auth) {
+        auth.locations().error(function(error){
+          $scope.error = error;
+          console.log(error);
+        }).then(function(){
+          $scope.locations = auth.locationsData;
+        });
+        $scope.showCategories = function(user){
+          auth.locationDetails(user).error(function(error){
+            $scope.error = error;
+            console.log(error);
+          }).then(function(){
+            $scope.location = auth.location;
+            console.log($scope.location);
+          });
+        }
+    })
     .controller("SignIn", function($scope, $location, auth) {
         $scope.sign_in = function() {
             //$location.path("#/");
@@ -201,6 +239,15 @@ angular.module("contactsApp", ['ngRoute'])
         }
       }
     })
+    .controller('NavCtrl', [
+    '$scope',
+    'auth',
+    function($scope, auth){
+        $scope.isLoggedIn = auth.isLoggedIn;
+        $scope.currentUser = auth.currentUser;
+        $scope.logOut = auth.logOut;
+      }
+    ])
     .controller("SignUp", function($scope, $location, $http) {
         $scope.sign_up = function() {
             var username = $scope.username;

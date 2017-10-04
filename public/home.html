@@ -1,12 +1,15 @@
 <div class="containerMain divBackground">
 </br>
   <div class="row searchDiv">
-    <h2 class ="question" style="padding:10px"> Are you looking for food around you?</h2>
+    <!--
+      <h2 class ="question" style="padding:10px"> Are you looking for food around you?</h2>
       <div class ="inputSearch col-xs-11 col-sm-7 col-sm-offset-2 col-md-6 col-md-offset-3 vcenter">
         <button class="elementAlign"><img class="img-responsive" src="./img/location.png" style="max-width:40px"/></button>
         <input id="address" type="text" class="elementAlign"/>
       </div>
-      <button class="btn btn-primary waves-effect waves-light">Find Food</button>
+    --><div class="text-center">
+      <button class="btn btn-primary waves-effect waves-light text-center" ng-click="findFood()">Find Food Now</button>
+    </div>
     </div>
 </div>
 <div class="container">
@@ -15,3 +18,12 @@
     <h4 style="float:left">Download our App from the Apple App Store and Google Play!</h4>
   </div>
 </div>
+
+        <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!-- Material Design Bootstrap -->
+    <script type="text/javascript" src="js/mdb.js"></script>

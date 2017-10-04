@@ -1,0 +1,18 @@
+</br></br></br></br></br>
+<div class="container">
+  <div ng-repeat="location in locations">
+    <div class="card col-lg-3 col-md-3" style="margin:0.5rem 15px 1rem 0;padding:0px;">
+      <div class="view overlay hm-white-slight">
+        <img class="card-img-top img-responsive" src={{location.image}} alt="Card image cap">
+        <a href="">
+            <div class="mask"></div>
+        </a>
+      </div>
+      <div class="card-block" style="padding:15px">
+        <h4 class="card-title" style="font-weight:400;color:black">{{location.name}}</h4>
+        <p class="card-text">{{location.description}}</p>
+        <a ng-click="showCategories(location.user)" class="btn btn-primary">Order</a>
+      </div>
+    </div>
+  </div>
+<div>
